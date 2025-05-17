@@ -46,9 +46,8 @@ class Task(models.Model):
     )
 
     def __str__(self) -> str:
-        return (f"{self.task_type.name if self.task_type else 'No type!'}: "
-                f"{self.name}, {self.deadline}, {self.is_completed}, "
-                f"{self.priority}")
+        return (f"{self.task_type.name}: {self.name}, {self.deadline}, "
+                f"{self.is_completed}, {self.priority}")
 
     class Meta:
         ordering = ["deadline"]
