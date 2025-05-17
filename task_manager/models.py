@@ -10,8 +10,8 @@ class TaskType(models.Model):
 
     class Meta:
         ordering = ["name"]
-        verbose_name = "task"
-        verbose_name_plural = "tasks"
+        verbose_name = "task type"
+        verbose_name_plural = "tasks type"
 
 
 class Task(models.Model):
@@ -108,7 +108,12 @@ class Project(models.Model):
     description = models.TextField(blank=True, null=True)
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField()
-    team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True)
+    team = models.ForeignKey(
+        Team,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="team_projects"
+    )
 
     class Meta:
         ordering = ["-end_date"]
