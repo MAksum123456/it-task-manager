@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  {% include "includes/navbar.html" %}
+
+  <div class="task-page-bg"
+       style="min-height: 100vh;
+           background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+           url('{% static 'images/curved.jpg' %}');
+           background-size: cover;
+           background-position: center;
+           padding: 60px 0 0 0;">
+
+    <div class="main-hero-section text-center" style="padding-top: 40px;">
+      <div class="container">
+        <h1 class="display-3 fw-bold hero-title" style="color: lightseagreen;">
+          You don't have permission to access this page!
+        </h1>
+
+        {% if user.is_authenticated %}
+          <div class="mx-auto mt-4"
+               style="max-width: 600px;
+                      background-color: rgba(0, 0, 0, 0.5);
+                      border-radius: 10px;
+                      padding: 20px;
+                      color: white;">
+            <h5 class="mb-3" style="color:lightskyblue">Your permissions:</h5>
+            <ul class="list-unstyled mb-0">
+              {% for perm in permissions %}
+                {% with perm|cut:"task_manager." as pretty_perm %}
+                  <li style="color: lightcyan">{{ pretty_perm }}</li>
+                {% endwith %}
+              {% empty %}
+                <li>No permissions</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% else %}
+          <p style="color: white; margin-top: 20px;">
+            You're not authenticated. <a href="{% url 'login' %}" style="color: lightblue;">Login</a>
+          </p>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+{% endblock %}
