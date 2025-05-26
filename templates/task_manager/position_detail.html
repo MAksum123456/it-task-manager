@@ -1,0 +1,65 @@
+{% extends "includes/detail_wrapper.html" %}
+{% load static %}
+
+{% block title %}{{ position.name }} Details{% endblock %}
+
+{% block detail_content %}
+  <div class="text-light project-detail-container">
+
+    <!-- Header -->
+    <div class="project-header text-center mb-5">
+      <h1 class="detail-title">{{ position.name }}</h1>
+      <p class="detail-subtitle">Position Overview</p>
+    </div>
+
+    <!-- Workers -->
+    <div class="tasks-section">
+      <div class="section-header">
+        <h2>
+          <i class="fas fa-users me-2"></i>
+          Assigned Workers
+          <span class="task-count">{{ position.position_workers.count }}</span>
+        </h2>
+      </div>
+
+      {% if position.position_workers.exists %}
+        <div class="task-list">
+          {% for worker in position.position_workers.all %}
+            <a href="{% url 'task_manager:worker-detail' pk=worker.id %}" class="task-card">
+              <div class="task-status" style="background-color: #00BFFF;"></div>
+              <div class="task-content">
+                <h4>{{ worker.username }}</h4>
+                {% if worker.first_name or worker.last_name %}
+                  <div class="task-meta">
+                    <span><i class="fas fa-user"></i> {{ worker.first_name }} {{ worker.last_name }}</span>
+                  </div>
+                {% endif %}
+              </div>
+              <div class="task-actions">
+                <i class="fas fa-chevron-right"></i>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <i class="fas fa-info-circle"></i>
+          <p>No workers assigned to this position.</p>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Update & Delete -->
+    <div class="action-buttons">
+      <a href="{% url 'task_manager:position-update' pk=position.id %}" class="btn-action btn-update">
+        <i class="fas fa-edit"></i>
+        <span>Edit Position</span>
+      </a>
+
+      <a href="{% url 'task_manager:position-delete' pk=position.id %}" class="btn-action btn-delete">
+        <i class="fas fa-trash-alt"></i>
+        <span>Delete Position</span>
+      </a>
+    </div>
+  </div>
+{% endblock %}

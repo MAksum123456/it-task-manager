@@ -1,0 +1,101 @@
+{% extends "includes/detail_wrapper.html" %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block detail_content %}
+  <div class="text-light">
+    <div class="text-center mb-5">
+      <h1 class="detail-title">{{ project.name }}</h1>
+      <p class="detail-subtitle">Project Overview</p>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-box">
+        <i class="fas fa-align-left icon-accent"></i>
+        <div>
+          <h5>Description</h5>
+          <p>{{ project.description|default:"No description provided" }}</p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="fas fa-calendar-day icon-accent"></i>
+        <div>
+          <h5>Start Date</h5>
+          <p>{{ project.start_date|date:"M d, Y" }}</p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="fas fa-calendar-times icon-accent"></i>
+        <div>
+          <h5>End Date</h5>
+          <p>{{ project.end_date|date:"M d, Y" }}</p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="fas fa-users icon-accent"></i>
+        <div>
+          <h5>Team</h5>
+          <p>
+            <a href="{% url 'task_manager:team-detail' pk=project.team.id %}" class="link-accent">
+              {{ project.team.name }}
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tasks-section">
+      <div class="section-header">
+        <h2>
+          <i class="fas fa-tasks"></i>
+          Project Tasks
+          <span class="task-count">{{ project.project_tasks.count }}</span>
+        </h2>
+      </div>
+
+      {% if project.project_tasks.exists %}
+        <div class="task-list">
+          {% for task in project.project_tasks.all %}
+            <a href="{% url 'task_manager:task-detail' pk=task.id %}" class="task-card">
+              <div class="task-content">
+                <h4>{{ task.name }}</h4>
+                <div class="task-meta">
+                  <span><i class="fas fa-clock"></i> {{ task.deadline|date:"M d, Y" }}</span>
+                  <span><i class="fas fa-flag"></i> {{ task.get_priority_display }}</span>
+                </div>
+              </div>
+              <div class="task-actions">
+          <span class="status-badge {% if task.is_completed %}completed{% else %}in-progress{% endif %}">
+            {% if task.is_completed %}Completed{% else %}In Progress{% endif %}
+          </span>
+                <i class="fas fa-chevron-right"></i>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <i class="fas fa-info-circle"></i>
+          <p>No tasks assigned to this project</p>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="action-buttons">
+      <a href="{% url 'task_manager:project-update' pk=project.id %}" class="btn-action btn-update">
+        <i class="fas fa-edit"></i>
+        <span>Edit Project</span>
+      </a>
+
+
+      <a href="{% url 'task_manager:project-delete' pk=project.id %}" class="btn-action btn-delete">
+        <i class="fas fa-trash-alt"></i>
+        <span>Delete Project</span>
+      </a>
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  {% include "includes/navbar.html" %}
+
+  <div class="task-page-bg"
+       style="min-height: 100vh;
+           background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+           url('{% static 'images/curved.jpg' %}');
+           background-size: cover;
+           background-position: center;
+           padding: 60px 0 0 0;">
+
+    <div class="container-fluid" style="max-width: 1400px;">
+      <h1 class="text-light mb-4 text-center">Team List</h1>
+
+      <div style="background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px);" class="p-4 rounded shadow-lg">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          {% include "includes/search_form.html" %}
+
+          <div class="create-button" title="Create Team">
+            <a href="{% url 'task_manager:team-create' %}" class="btn create-btn">+</a>
+          </div>
+
+
+        </div>
+
+
+        {% if team_list %}
+          <div class="table-responsive">
+            <table class="table  align-middle" style="background-color: transparent;">
+              <thead>
+              <tr style="background-color: rgba(0, 0, 0, 0.5);">
+                <th style="color: floralwhite">ID</th>
+                <th style="color: floralwhite">Name</th>
+                <th style="color: floralwhite">Count Projects</th>
+                <th style="color: floralwhite">Count Workers</th>
+              </tr>
+              </thead>
+              <tbody style="background-color: transparent;">
+              {% for team in team_list %}
+                <tr style="background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); border-bottom: 1px solid rgba(255,255,255,0.05);">
+                  <td style="color: floralwhite">{{ team.id }}</td>
+                  <td>
+                    <a class="table-link" href="{% url 'task_manager:team-detail' pk=team.id %}"
+                       class="text-info fw-bold text-decoration-none">
+                      {{ team.name }}
+                    </a>
+                  </td>
+                  <td style="color: floralwhite">{{ team.team_projects.count }}</td>
+                  <td style="color: floralwhite">{{ team.team_workers.count }}</td>
+
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+
+            {% include "includes/pagination.html" %}
+          </div>
+        {% else %}
+          <p class="text-center text-muted">There are no team yet.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

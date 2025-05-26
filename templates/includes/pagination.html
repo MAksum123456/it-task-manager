@@ -1,0 +1,68 @@
+{% load query_transform %}
+
+<style>
+    .btn-ghost {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        color: rgba(255, 255, 255, 0.8) !important;
+        transition: all 0.2s;
+    }
+
+    .btn-ghost:hover {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        border-color: rgba(255, 255, 255, 0.3) !important;
+    }
+
+    .btn-ghost.active {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        border-color: rgba(255, 255, 255, 0.4) !important;
+        color: white !important;
+        font-weight: 500;
+    }
+
+    .btn-ghost.disabled {
+        background-color: transparent !important;
+        color: rgba(255, 255, 255, 0.3) !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+</style>
+
+{% if is_paginated %}
+  <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap">
+    {% if page_obj.has_previous %}
+      <a href="?{% query_transform request page=page_obj.previous_page_number %}"
+         class="btn btn-ghost px-3 py-1">
+        &laquo; Previous
+      </a>
+    {% else %}
+      <span class="btn btn-ghost disabled px-3 py-1">
+        &laquo; Previous
+      </span>
+    {% endif %}
+
+    <!-- Page Numbers (Max 3) -->
+    <div class="d-flex gap-1 mx-2">
+      {% for num in paginator.page_range %}
+        {% if num == page_obj.number %}
+          <span class="btn btn-ghost active px-3 py-1">{{ num }}</span>
+        {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'2' %}
+          <a href="?{% query_transform request page=num %}"
+             class="btn btn-ghost px-3 py-1">
+            {{ num }}
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if page_obj.has_next %}
+      <a href="?{% query_transform request page=page_obj.next_page_number %}"
+         class="btn btn-ghost px-3 py-1">
+        Next &raquo;
+      </a>
+    {% else %}
+      <span class="btn btn-ghost disabled px-3 py-1">
+        Next &raquo;
+      </span>
+    {% endif %}
+  </div>
+{% endif %}

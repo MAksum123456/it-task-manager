@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  {% include "includes/navbar.html" %}
+
+  <header class="taskmanager-header"
+          style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+              url('{% static 'images/curved.jpg' %}');
+              background-size: cover;
+              background-position: center;">
+    <div class="main-hero-section text-center py-5">
+      <div class="container">
+        <h1 class="display-3 fw-bold hero-title">TaskManager360</h1>
+        <p class="lead hero-subtitle">Efficient Task Management System</p>
+        <div>
+          <h4 class="welcome-title">Hello, {{ username }}!</h4>
+          <p class="lead welcome-subtitle">
+            You have visited this page {{ num_visits }} time{{ num_visits|pluralize }}.
+          </p>
+        </div>
+
+        <div class="stats-icons d-flex justify-content-center flex-wrap mt-5">
+          <div class="stat-icon mx-3 mb-4">
+            <div class="stat-square count" data-target="{{ num_tasks }}">0</div>
+            <div class="stat-label">Tasks</div>
+          </div>
+          <div class="stat-icon mx-3 mb-4">
+            <div class="stat-square count" data-target="{{ num_projects }}">0</div>
+            <div class="stat-label">Projects</div>
+          </div>
+          <div class="stat-icon mx-3 mb-4">
+            <div class="stat-square count" data-target="{{ num_workers }}">0</div>
+            <div class="stat-label">Workers</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Navigation icons -->
+    <section class="navigation-icons py-4 bg-space">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-auto px-3 mb-3">
+            <a href="{% url 'task_manager:task-list' %}" class="nav-icon">
+              <i class="fas fa-tasks"></i>
+              <span>Tasks</span>
+            </a>
+          </div>
+          <div class="col-auto px-3 mb-3">
+            <a href="{% url 'task_manager:project-list' %}" class="nav-icon">
+              <i class="fas fa-project-diagram"></i>
+              <span>Projects</span>
+            </a>
+          </div>
+          <div class="col-auto px-3 mb-3">
+            <a href="{% url 'task_manager:worker-list' %}" class="nav-icon">
+              <i class="fas fa-users"></i>
+              <span>Workers</span>
+            </a>
+          </div>
+          <div class="col-auto px-3 mb-3">
+            <a href="{% url 'task_manager:team-list' %}" class="nav-icon">
+              <i class="fas fa-people-group"></i>
+              <span>Teams</span>
+            </a>
+          </div>
+          <div class="col-auto px-3 mb-3">
+            <a href="{% url 'task_manager:position-list' %}" class="nav-icon">
+              <i class="fas fa-user-tie"></i>
+              <span>Positions</span>
+            </a>
+          </div>
+          <div class="col-auto px-3 mb-3">
+            <a href="{% url 'task_manager:task-type-list' %}" class="nav-icon">
+              <i class="fas fa-tags"></i>
+              <span>Task Types</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer-section bg-dark text-white pt-4 pb-3">
+      <div class="container text-center">
+        <p>&copy; 2025 TaskManager360.</p>
+      </div>
+    </footer>
+  </header>
+  <style>
+      .hero-title,
+      .hero-subtitle,
+      .welcome-title,
+      .welcome-subtitle,
+      .stat-square,
+      .stat-label {
+          color: lightgreen; /* М'який світлий зелений */
+          text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      }
+
+      .stat-square {
+          font-size: 2rem;
+          font-weight: bold;
+      }
+
+      .stat-label {
+          margin-top: 5px;
+          font-size: 1.1rem;
+      }
+  </style>
+  <script>
+      document.addEventListener("DOMContentLoaded", () => {
+          const counters = document.querySelectorAll('.count');
+          const speed = 50; // Чим менше, тим швидше
+
+          counters.forEach(counter => {
+              const updateCount = () => {
+                  const target = +counter.getAttribute('data-target');
+                  const count = +counter.innerText;
+
+                  const increment = Math.ceil(target / speed);
+
+                  if (count < target) {
+                      counter.innerText = count + increment;
+                      setTimeout(updateCount, 20);
+                  } else {
+                      counter.innerText = target;
+                  }
+              };
+
+              updateCount();
+          });
+      });
+  </script>
+
+{% endblock %}

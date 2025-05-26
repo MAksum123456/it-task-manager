@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+  {% include "includes/navbar.html" %}
+  <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+  <div class="detail-bg"
+       style="min-height: 100vh;
+           background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+           url('{% static 'images/curved.jpg' %}');
+           background-size: cover;
+           background-position: center;
+           padding: 60px 0;
+           color: #f0f0f0;">
+    <div class="container detail-wrapper">
+      {% block detail_content %}
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}
