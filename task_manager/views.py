@@ -243,7 +243,7 @@ class WorkerUpdateView(
 
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if self.object.pk != request.user.pk:
+        if not request.user.is_superuser and self.object.pk != request.user.pk:
             return self.handle_no_permission()
         return super().dispatch(request, *args, **kwargs)
 
@@ -257,7 +257,7 @@ class WorkerDeleteView(
 
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if self.object.pk != request.user.pk:
+        if not request.user.is_superuser and self.object.pk != request.user.pk:
             return self.handle_no_permission()
         return super().dispatch(request, *args, **kwargs)
 
