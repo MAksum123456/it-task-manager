@@ -1,0 +1,122 @@
+{% extends "includes/detail_wrapper.html" %}
+{% load static %}
+
+{% block detail_content %}
+  <div class="text-light">
+    <div class="text-center mb-5">
+      <h1 class="detail-title">{{ task.name }}</h1>
+      <p class="detail-subtitle">Task Overview</p>
+    </div>
+
+    <!-- Task Information -->
+    <div class="info-grid mb-5">
+      <div class="info-box">
+        <i class="fas fa-align-left icon-accent"></i>
+        <div>
+          <h5>Description</h5>
+          <p>{{ task.description|default:"No description provided" }}</p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="fas fa-calendar-times icon-accent"></i>
+        <div>
+          <h5>Deadline</h5>
+          <p>{{ task.deadline|date:"M d, Y" }}</p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="fas fa-check-circle icon-accent"></i>
+        <div>
+          <h5>Status</h5>
+          <p>
+            <span class="badge {% if task.is_completed %}bg-success{% else %}bg-warning text-dark{% endif %}">
+              {% if task.is_completed %}Completed{% else %}Pending{% endif %}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="fas fa-flag icon-accent"></i>
+        <div>
+          <h5>Priority</h5>
+          <p>{{ task.get_priority_display }}</p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="fas fa-tasks icon-accent"></i>
+        <div>
+          <h5>Task Type</h5>
+          <p>
+            <a href="{% url 'task_manager:task-type-detail' pk=task.task_type.id %}" class="link-accent">
+              {{ task.task_type }}
+            </a>
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="fas fa-project-diagram icon-accent"></i>
+        <div>
+          <h5>Project</h5>
+          <p>
+            <a href="{% url 'task_manager:project-detail' pk=task.project.id %}" class="link-accent">
+              {{ task.project.name }}
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Assigned Workers -->
+    <div class="mb-4">
+      <h3 class="border-bottom pb-2 mb-3">
+        <i class="fas fa-users me-2"></i>Assigned Workers
+        <span class="badge bg-primary rounded-pill ms-2">{{ task.assignees.count }}</span>
+      </h3>
+
+      {% if task.assignees.all %}
+        <div class="list-group">
+          {% for worker in task.assignees.all %}
+            <a href="{% url 'task_manager:worker-detail' pk=worker.id %}"
+               class="list-group-item list-group-item-action bg-transparent text-white border-light mb-2 d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-user-circle fa-lg me-3"></i>
+                <div>
+                  <h5 class="mb-1">{{ worker.username }}</h5>
+                  <small class="text-white-50">{{ worker.first_name }} {{ worker.last_name }}</small>
+                </div>
+              </div>
+              <i class="fas fa-chevron-right"></i>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="alert alert-dark text-center">
+          <i class="fas fa-info-circle me-2"></i>No workers assigned to this task
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="action-buttons">
+      <a href="{% url 'task_manager:task-update' pk=task.id %}" class="btn-action btn-update">
+        <i class="fas fa-edit"></i>
+        <span>Edit Task</span>
+      </a>
+
+      <a href="{% url 'task_manager:task-delete' pk=task.id %}" class="btn-action btn-delete">
+        <i class="fas fa-trash-alt"></i>
+        <span>Delete Task</span>
+      </a>
+    </div>
+  </div>
+
+  <style>
+      .info-grid {
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      }
+  </style>
+{% endblock %}

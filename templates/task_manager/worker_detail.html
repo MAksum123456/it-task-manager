@@ -1,0 +1,138 @@
+{% extends "includes/detail_wrapper.html" %}
+{% load static %}
+
+{% block title %}{{ worker.username }} Profile{% endblock %}
+
+{% block detail_content %}
+  <div class="text-light">
+    <div class="text-center mb-5">
+      <h1 class="detail-title">{{ worker.username }}</h1>
+      <p class="detail-subtitle">Worker Profile</p>
+    </div>
+
+    <!-- Worker Information -->
+    <div class="info-grid mb-5">
+      <div class="info-box">
+        <i class="fas fa-envelope icon-accent"></i>
+        <div>
+          <h5>Email</h5>
+          <p>{{ worker.email }}</p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="fas fa-user icon-accent"></i>
+        <div>
+          <h5>Full Name</h5>
+          <p>{{ worker.first_name }} {{ worker.last_name }}</p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="fas fa-briefcase icon-accent"></i>
+        <div>
+          <h5>Position</h5>
+          <p>
+            {% if worker.position %}
+              <a href="{% url 'task_manager:position-detail' pk=worker.position.id %}" class="link-accent">
+                {{ worker.position }}
+              </a>
+            {% else %}
+              None
+            {% endif %}
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="fas fa-users icon-accent"></i>
+        <div>
+          <h5>Team</h5>
+          <p>
+            {% if worker.team %}
+              <a href="{% url 'task_manager:team-detail' pk=worker.team.id %}" class="link-accent">
+                {{ worker.team }}
+              </a>
+            {% else %}
+              None
+            {% endif %}
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="fas fa-user-shield icon-accent"></i>
+        <div>
+          <h5>Staff Status</h5>
+          <p>
+                    <span class="badge {% if worker.is_staff %}bg-success{% else %}bg-secondary{% endif %}">
+                        {% if worker.is_staff %}Staff Member{% else %}Regular User{% endif %}
+                    </span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tasks Section -->
+    <div class="mb-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>
+          <i class="fas fa-tasks me-2"></i>Assigned Tasks
+          <span class="badge bg-primary rounded-pill ms-2">{{ worker.assigned_tasks.count }}</span>
+        </h3>
+      </div>
+
+      {% if worker.assigned_tasks.all %}
+        <div class="list-group">
+          {% for task in worker.assigned_tasks.all %}
+            <a href="{% url 'task_manager:task-detail' pk=task.id %}"
+               class="list-group-item list-group-item-action bg-transparent text-white border-light mb-2 d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-circle-notch fa-lg me-3"
+                   style="color: {% if task.is_completed %}#28a745{% else %}#ffc107{% endif %}"></i>
+                <div>
+                  <h5 class="mb-1">{{ task.name }}</h5>
+                  <small class="text-white-50">
+                    Deadline: {{ task.deadline|date:"M d, Y" }} |
+                    Priority: {{ task.get_priority_display }}
+                  </small>
+                </div>
+              </div>
+              <div>
+                    <span class="badge bg-{% if task.is_completed %}success{% else %}warning{% endif %} me-2">
+                        {% if task.is_completed %}Completed{% else %}In Progress{% endif %}
+                    </span>
+                <i class="fas fa-chevron-right"></i>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="alert alert-dark text-center">
+          <i class="fas fa-info-circle me-2"></i>No tasks assigned to this worker
+        </div>
+      {% endif %}
+    </div>
+    <!-- Update & Delete -->
+    <div class="action-buttons">
+      <a href="{% url 'task_manager:worker-update' pk=worker.id %}" class="btn-action btn-update">
+        <i class="fas fa-edit"></i>
+        <span>Edit Worker</span>
+      </a>
+
+
+      <a href="{% url 'task_manager:worker-delete' pk=worker.id %}" class="btn-action btn-delete">
+        <i class="fas fa-trash-alt"></i>
+        <span>Delete Worker</span>
+      </a>
+
+    </div>
+  </div>
+
+  <style>
+    /* Custom adjustments for worker detail */
+    .info-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+  </style>
+{% endblock %}

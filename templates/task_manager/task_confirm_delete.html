@@ -1,0 +1,39 @@
+{% extends "includes/form_wrapper.html" %}
+{% load static crispy_forms_filters %}
+
+{% block title %}Delete Task{% endblock %}
+
+{% block form_content %}
+  <div class="text-center text-white">
+    <!-- Warning Icon -->
+    <div class="mb-4">
+      <i class="fas fa-exclamation-triangle fa-4x text-warning mb-3"></i>
+      <h1 class="display-5 fw-bold">Confirm Task Deletion</h1>
+      <p class="lead">You are about to permanently delete this task.</p>
+    </div>
+
+    <!-- Task Card -->
+    <div class="glass-card p-4 mb-4 mx-auto" style="max-width: 500px;">
+      <div class="d-flex align-items-center justify-content-center">
+        <i class="fas fa-tasks fa-2x me-3 text-danger"></i>
+        <h3 class="mb-0">{{ object.name }}</h3>
+      </div>
+    </div>
+
+    <div class="alert alert-warning mx-auto mb-4" style="max-width: 600px;">
+      <i class="fas fa-info-circle me-2"></i>
+      <strong>Warning:</strong> This action cannot be undone.
+    </div>
+
+    <form method="post" novalidate class="mx-auto" style="max-width: 400px;">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <div class="d-flex justify-content-center gap-3 mt-4">
+        <input type="submit" value="Confirm Delete" class="btn btn-danger px-4 py-2">
+        <a href="{% url 'task_manager:task-detail' pk=object.id %}" class="btn btn-outline-light px-4 py-2">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+{% endblock %}
