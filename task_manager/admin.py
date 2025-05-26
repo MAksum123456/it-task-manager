@@ -13,11 +13,17 @@ class ProjectAdmin(admin.ModelAdmin):
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ("name", "deadline", "is_completed", "priority", "task_type", "project")
+    list_display = (
+        "name",
+        "deadline",
+        "is_completed",
+        "priority",
+        "task_type",
+        "project"
+    )
     list_filter = ("deadline", "priority", "is_completed")
     search_fields = ("name",)
     autocomplete_fields = ("task_type", "project", "assignees")
-
 
 
 @admin.register(Worker)
