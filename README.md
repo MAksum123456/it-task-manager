@@ -3,7 +3,9 @@
 A web-based application for managing tasks within team projects, with a flexible access control system.
 
 ---
+[![Live Site](https://img.shields.io/badge/Visit%20Live%20Site-blue?style=for-the-badge&logo=firefox)](https://it-task-manager-64ei.onrender.com/)
 
+---
 ## 📚 Table of Contents
 
 * [About the Application](#about-the-application)
@@ -202,4 +204,6 @@ python manage.py runserver
 ---
 
 Feel free to contribute or submit issues!
-
+---
+You can explore the live version of **IT Task Manager** here:  
+🌐 **[https://it-task-manager-64ei.onrender.com](https://it-task-manager-64ei.onrender.com)**
