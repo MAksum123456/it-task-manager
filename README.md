@@ -193,6 +193,7 @@ python manage.py runserver
 | `pm_user`     | `qwsecure89`    | Project Manager   |
 | `teamlead`    | `leadpower1`    | Team Lead         |
 | `employee01`  | `empworker8`    | Employee          |
+| `user`        |`user12345`      | Employee          |
 
 
 
