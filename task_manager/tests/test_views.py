@@ -626,10 +626,16 @@ class DispatchTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.user = Worker.objects.create_user(
-            username="user1", password="testpass", first_name="User", last_name="One"
+            username="user1",
+            password="testpass",
+            first_name="User",
+            last_name="One"
         )
         self.other_user = Worker.objects.create_user(
-            username="user2", password="testpass", first_name="User", last_name="Two"
+            username="user2",
+            password="testpass",
+            first_name="User",
+            last_name="Two"
         )
 
     def test_dispatch_allows_self_access(self):
@@ -645,7 +651,9 @@ class DispatchTest(TestCase):
 
     def test_dispatch_denies_other_user_access(self):
         request = self.factory.post(
-            reverse("task_manager:worker-delete", kwargs={"pk": self.other_user.pk})
+            reverse(
+                "task_manager:worker-delete", kwargs={"pk": self.other_user.pk}
+            )
         )
         request.user = self.user
 
