@@ -231,34 +231,30 @@ class WorkerCreateView(
     permission_required = "task_manager.add_worker"
 
 
-class WorkerUpdateView(
-    LoginRequiredMixin,
-    generic.UpdateView
-):
+class WorkerUpdateView(PermissionRequiredMixin, LoginRequiredMixin, generic.UpdateView):
     model = Worker
-    form_class = WorkerUpdateForm
+    permission_required = 'task_manager.change_worker'
+    fields = ['username', 'first_name', 'last_name', 'position', 'team']
+    template_name = 'task_manager/worker_form.html'
     success_url = reverse_lazy("task_manager:worker-list")
-
-    """ permission to change the data only for yourself"""
 
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if not request.user.is_superuser and self.object.pk != request.user.pk:
-            return self.handle_no_permission()
+        if self.object.pk == request.user.pk:
+            return super().dispatch(request, *args, **kwargs)
         return super().dispatch(request, *args, **kwargs)
 
 
-class WorkerDeleteView(
-    LoginRequiredMixin,
-    generic.DeleteView
-):
+class WorkerDeleteView(PermissionRequiredMixin, LoginRequiredMixin, generic.DeleteView):
     model = Worker
+    permission_required = 'task_manager.delete_worker'
     success_url = reverse_lazy("task_manager:worker-list")
+    template_name = 'task_manager/worker_confirm_delete.html'
 
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if not request.user.is_superuser and self.object.pk != request.user.pk:
-            return self.handle_no_permission()
+        if self.object.pk == request.user.pk:
+            return super().dispatch(request, *args, **kwargs)
         return super().dispatch(request, *args, **kwargs)
 
 
