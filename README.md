@@ -186,13 +186,14 @@ python manage.py runserver
 
 ## 👥 Test Users
 
-| Username      | Password     | Role              |
-|---------------|--------------|-------------------|
-| `admin`       | `adminpass`  | Administrator     |
-| `hr_user`     | `hr1234`     | HR                |
-| `pm_user`     | `pm1234`     | Project Manager   |
-| `teamlead`    | `lead1234`   | Team Lead         |
-| `employee01`  | `emp1234`    | Employee          |
+| Username      | Password        | Role              |
+|---------------|-----------------|-------------------|
+| `admin`       | `adminpass123`  | Administrator     |
+| `hr_user`     | `hrwler4567`    | HR                |
+| `pm_user`     | `qwsecure89`    | Project Manager   |
+| `teamlead`    | `leadpower1`    | Team Lead         |
+| `employee01`  | `empworker8`    | Employee          |
+
 
 
 ## ℹ️ Additional Information
