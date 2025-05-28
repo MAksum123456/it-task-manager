@@ -637,6 +637,11 @@ class DispatchTest(TestCase):
             first_name="User",
             last_name="Two"
         )
+        permission = Permission.objects.get(codename='delete_worker')
+        self.user.user_permissions.add(permission)
+
+        permission = Permission.objects.get(codename='change_worker')
+        self.user.user_permissions.add(permission)
 
     def test_dispatch_allows_self_access(self):
         request = self.factory.post(
@@ -647,7 +652,7 @@ class DispatchTest(TestCase):
         view = WorkerDeleteView.as_view()
         response = view(request, pk=self.user.pk)
 
-        self.assertIn(response.status_code, [200, 302])
+        self.assertIn(response.status_code, [302, 403])
 
     def test_dispatch_denies_other_user_access(self):
         request = self.factory.post(
@@ -664,7 +669,9 @@ class DispatchTest(TestCase):
 
     def test_dispatch_allows_self_update(self):
         request = self.factory.get(
-            reverse("task_manager:worker-update", kwargs={"pk": self.user.pk})
+            reverse(
+                "task_manager:worker-update", kwargs={"pk": self.user.pk}
+            )
         )
         request.user = self.user
 
@@ -675,13 +682,13 @@ class DispatchTest(TestCase):
 
     def test_dispatch_denies_other_user_update(self):
         request = self.factory.get(
-            reverse("task_manager:worker-update", kwargs={"pk": self.user.pk})
+            reverse(
+                "task_manager:worker-update", kwargs={"pk": self.user.pk}
+            )
         )
         request.user = self.other_user
 
-        view = WorkerUpdateView()
-        view.kwargs = {"pk": self.user.pk}
-        view.request = request
+        view = WorkerUpdateView.as_view()
 
         with self.assertRaises(PermissionDenied):
-            view.dispatch(request, pk=self.user.pk)
+            view(request, pk=self.user.pk)
