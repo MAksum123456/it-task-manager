@@ -156,6 +156,42 @@ python manage.py runserver
 * ![Login](https://github.com/user-attachments/assets/2355017b-530e-4acf-8e5a-58884c252649)
 
 ---
+## 🔐 Permissions per Role
+
+### 🛡 Administrator
+— Full control over **all** entities: can create, read, update, delete.
+
+### 🧑‍💼 HR
+— Can:
+- Create, update, view (workers, position)
+  
+
+### 🧑‍💻 Project Manager
+— Can:
+- Create and manage projects and tasks
+- View workers, position
+
+### 🧑‍🏫 Team Leader
+— Can:
+- View tasks, projects, teams, workers
+- Update task status
+
+### 🧑 Employee
+— Can:
+- View all tables
+
+---
+
+## 👥 Test Users
+
+| Username      | Password     | Role              |
+|---------------|--------------|-------------------|
+| `admin`       | `adminpass`  | Administrator     |
+| `hr_user`     | `hr1234`     | HR                |
+| `pm_user`     | `pm1234`     | Project Manager   |
+| `teamlead`    | `lead1234`   | Team Lead         |
+| `employee01`  | `emp1234`    | Employee          |
+
 
 ## ℹ️ Additional Information
 
