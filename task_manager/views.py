@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     PermissionRequiredMixin)
+from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -8,7 +9,6 @@ from django.views import generic
 
 from .forms import (
     WorkerCreationForm,
-    WorkerUpdateForm,
     TaskTypeSearchForm,
     TaskSearchForm,
     TeamSearchForm,
@@ -231,30 +231,37 @@ class WorkerCreateView(
     permission_required = "task_manager.add_worker"
 
 
-class WorkerUpdateView(PermissionRequiredMixin, LoginRequiredMixin, generic.UpdateView):
+class WorkerUpdateView(
+    PermissionRequiredMixin,
+    LoginRequiredMixin,
+    generic.UpdateView
+):
     model = Worker
     permission_required = 'task_manager.change_worker'
     fields = ['username', 'first_name', 'last_name', 'position', 'team']
-    template_name = 'task_manager/worker_form.html'
     success_url = reverse_lazy("task_manager:worker-list")
 
     def dispatch(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if self.object.pk == request.user.pk:
-            return super().dispatch(request, *args, **kwargs)
+        worker = self.get_object()
+        if worker.pk != request.user.pk:
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
-class WorkerDeleteView(PermissionRequiredMixin, LoginRequiredMixin, generic.DeleteView):
+class WorkerDeleteView(
+    PermissionRequiredMixin,
+    LoginRequiredMixin,
+    generic.DeleteView
+):
     model = Worker
     permission_required = 'task_manager.delete_worker'
     success_url = reverse_lazy("task_manager:worker-list")
-    template_name = 'task_manager/worker_confirm_delete.html'
 
     def dispatch(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if self.object.pk == request.user.pk:
-            return super().dispatch(request, *args, **kwargs)
+        worker = self.get_object()
+        if worker.pk != request.user.pk:
+            raise PermissionDenied()
+
         return super().dispatch(request, *args, **kwargs)
 
 
