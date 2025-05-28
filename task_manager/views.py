@@ -175,7 +175,7 @@ class TaskDeleteView(
     generic.DeleteView
 ):
     model = Task
-    success_url = reverse_lazy(LoginRequiredMixin, "task_manager:task-list")
+    success_url = reverse_lazy("task_manager:task-list")
     permission_required = "task_manager.delete_task"
 
 
@@ -232,8 +232,8 @@ class WorkerCreateView(
 
 
 class WorkerUpdateView(
-    PermissionRequiredMixin,
     LoginRequiredMixin,
+    PermissionRequiredMixin,
     generic.UpdateView
 ):
     model = Worker
@@ -242,15 +242,26 @@ class WorkerUpdateView(
     success_url = reverse_lazy("task_manager:worker-list")
 
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
         worker = self.get_object()
+
         if worker.pk != request.user.pk:
-            raise PermissionDenied()
+            if (
+                    not request.user.is_superuser and
+                    not request.user.groups.filter(
+                        name__in=["Administrator", "HR"]
+                    ).exists()
+            ):
+                raise PermissionDenied()
+
         return super().dispatch(request, *args, **kwargs)
 
 
 class WorkerDeleteView(
-    PermissionRequiredMixin,
     LoginRequiredMixin,
+    PermissionRequiredMixin,
     generic.DeleteView
 ):
     model = Worker
@@ -258,9 +269,19 @@ class WorkerDeleteView(
     success_url = reverse_lazy("task_manager:worker-list")
 
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
         worker = self.get_object()
+
         if worker.pk != request.user.pk:
-            raise PermissionDenied()
+            if (
+                    not request.user.is_superuser and
+                    not request.user.groups.filter(
+                        name="Administrator"
+                    ).exists()
+            ):
+                raise PermissionDenied()
 
         return super().dispatch(request, *args, **kwargs)
 
