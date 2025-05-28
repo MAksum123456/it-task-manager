@@ -25,12 +25,6 @@ class WorkerCreationForm(UserCreationForm):
         return user
 
 
-class WorkerUpdateForm(forms.ModelForm):
-    class Meta:
-        model = Worker
-        fields = ["username", "position", "team"]
-
-
 class TaskTypeSearchForm(forms.Form):
     name = forms.CharField(
         max_length=255,
